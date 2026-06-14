@@ -1,22 +1,22 @@
-package com.example.simmanagementsystem.Entity;
+package com.example.simmanagementsystem.Request;
 
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-
-@Table(name = "sim_details")
-@Getter @Setter
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Simdetails {
+public class SimdetailsRequest {
 
-    private Long id;
+
     private String simNo;
     private String accountNumber;
     private String mobileNumber;
-    private String store_id;
-    private String created_by;
+    private String staffId;
+    private String storeId;
+
+
 }

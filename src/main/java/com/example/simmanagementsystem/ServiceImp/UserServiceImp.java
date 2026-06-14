@@ -5,6 +5,7 @@ import com.example.simmanagementsystem.Entity.users;
 import com.example.simmanagementsystem.Repository.UserRepository;
 import com.example.simmanagementsystem.Repository.simRepository;
 import com.example.simmanagementsystem.Request.LogInRequest;
+import com.example.simmanagementsystem.Request.SimdetailsRequest;
 import com.example.simmanagementsystem.Service.UserService;
 import com.example.simmanagementsystem.Utility.ApiResponse;
 import com.example.simmanagementsystem.Utility.ResponseBuilder;
@@ -21,23 +22,38 @@ public class UserServiceImp implements UserService {
     private final simRepository repository;
     @Override
     public ApiResponse<List<Simdetails>> logInUser(LogInRequest request) {
-        users userlist=repo.findByStaffIdAndStore_StoreCode(request.getStaffId(),request.getStoreId());
 
-
-        if( userlist.getRole()== Role.ADMIN ){
-           List<Simdetails> details=  repository.findAll();
-           if(details.isEmpty()){
-                return ResponseBuilder.DataNotFound();
-           }else{
-               return ResponseBuilder.success(details);
-           }
+        users userlist=repo.findByStaffId(request.getStaffId());
+     //   System.out.println(userlist.getPassword());
+        if(userlist==null){
+            return ResponseBuilder.DataNotFound();
         }else{
-             List<Simdetails> detaillist=repository.findByStore_Id(userlist.getStore());
-            if(detaillist.isEmpty()){
-                return ResponseBuilder.DataNotFound();
-            }else {
-                return ResponseBuilder.success(detaillist);
+            if(!request.getPassword().equals(userlist.getPassword())){
+                return ResponseBuilder.error("password is Invalid..!!");
+            }
+            if( userlist.getRole()== Role.ADMIN ){
+                List<Simdetails> details=  repository.findAll();
+                if(details.isEmpty()){
+                    return ResponseBuilder.DataNotFound();
+                }else{
+                    return ResponseBuilder.success(details);
+                }
+            }else{
+                List<Simdetails> detaillist=repository.findByStore_Id(userlist.getStore_id());
+                if(detaillist.isEmpty()){
+                    return ResponseBuilder.DataNotFound();
+                }else {
+                    return ResponseBuilder.success(detaillist);
+                }
             }
         }
+
+
+    }
+
+    @Override
+    public ApiResponse<String> simdetailsSave(SimdetailsRequest request) {
+
+        return repository.simdetailsSSave(request);
     }
 }

@@ -2,6 +2,7 @@ package com.example.simmanagementsystem.Controller;
 
 import com.example.simmanagementsystem.Entity.Simdetails;
 import com.example.simmanagementsystem.Request.LogInRequest;
+import com.example.simmanagementsystem.Request.SimdetailsRequest;
 import com.example.simmanagementsystem.Service.UserService;
 import com.example.simmanagementsystem.Utility.ApIConstant;
 import com.example.simmanagementsystem.Utility.ApiResponse;
@@ -23,5 +24,10 @@ public class UserController {
     @PostMapping("/LogInUser")
     public ApiResponse<List<Simdetails>>  logInUser(@RequestBody LogInRequest request) {
         return service.logInUser(request);
+    }
+
+    @PostMapping("/addSim")
+    public ApiResponse<String> simdetailsSave(@RequestBody SimdetailsRequest request) {
+        return  service.simdetailsSave(request);
     }
 }
