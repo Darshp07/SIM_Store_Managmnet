@@ -8,13 +8,16 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 @Repository
-@RequiredArgsConstructor
-public class UserRepository  {
-    private final JdbcTemplate jdbcTemplate;
+//@RequiredArgsConstructor
+public interface  UserRepository extends JpaRepository<users, Integer>  {
+    users findByStaffId(String staffId);
 
+    users findByStaffIdAndStore_StoreId(String staffId, String storeId);
+    //private final JdbcTemplate jdbcTemplate;
 
-    public users findByStaffId(String staffId) {
-        String sql="select * from users where staff_id='"+staffId+"'";
-       return jdbcTemplate.query(sql,new  BeanPropertyRowMapper<>(users.class)).getFirst();
-    }
+//
+//    public users findByStaffId(String staffId) {
+//        String sql="select * from users where staff_id='"+staffId+"'";
+//       return jdbcTemplate.query(sql,new  BeanPropertyRowMapper<>(users.class)).getFirst();
+//    }
 }

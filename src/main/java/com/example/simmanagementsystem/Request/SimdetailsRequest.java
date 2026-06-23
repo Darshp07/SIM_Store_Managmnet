@@ -16,7 +16,7 @@ public class SimdetailsRequest {
     private String accountNumber;
     private String mobileNumber;
     private String staffId;
-    private String storeId;
+
 
 
 }

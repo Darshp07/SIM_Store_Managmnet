@@ -13,4 +13,6 @@ public interface UserService {
     ApiResponse<List<Simdetails>> logInUser(LogInRequest request);
 
     ApiResponse<String> simdetailsSave(SimdetailsRequest request);
+
+    //   ApiResponse<String> simdetailsSave(SimdetailsRequest request);
 }

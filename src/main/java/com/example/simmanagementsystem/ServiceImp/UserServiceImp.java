@@ -23,9 +23,26 @@ public class UserServiceImp implements UserService {
     @Override
     public ApiResponse<List<Simdetails>> logInUser(LogInRequest request) {
 
-        users userlist=repo.findByStaffId(request.getStaffId());
+        users userlist=repo.findByStaffIdAndStore_StoreId(request.getStaffId(),request.getStoreId());
+        if( userlist.getRole()== Role.ADMIN ){
+            List<Simdetails> details=  repository.findAll();
+            if(details.isEmpty()){
+                return ResponseBuilder.DataNotFound();
+            }else{
+                return ResponseBuilder.success(details);
+            }
+        }else {
+            List<Simdetails> detaillist = repository.findByStore_Id(userlist.getStore().getId());
+
+            if (detaillist.isEmpty()) {
+                return ResponseBuilder.DataNotFound();
+            } else {
+                return ResponseBuilder.success(detaillist);
+            }
+        }
+      //  users userlist=repo.findByStaffId(request.getStaffId());
      //   System.out.println(userlist.getPassword());
-        if(userlist==null){
+      /*  if(userlist==null){
             return ResponseBuilder.DataNotFound();
         }else{
             if(!request.getPassword().equals(userlist.getPassword())){
@@ -39,14 +56,14 @@ public class UserServiceImp implements UserService {
                     return ResponseBuilder.success(details);
                 }
             }else{
-                List<Simdetails> detaillist=repository.findByStore_Id(userlist.getStore_id());
+                List<Simdetails> detaillist=repository.findByStore_Id(userlist.getStore().getStoreId());
                 if(detaillist.isEmpty()){
                     return ResponseBuilder.DataNotFound();
                 }else {
                     return ResponseBuilder.success(detaillist);
                 }
             }
-        }
+        }*/
 
 
     }
@@ -54,6 +71,24 @@ public class UserServiceImp implements UserService {
     @Override
     public ApiResponse<String> simdetailsSave(SimdetailsRequest request) {
 
-        return repository.simdetailsSSave(request);
+        users user =repo.findByStaffId(request.getStaffId());
+        Simdetails   simdetails= new Simdetails();
+        simdetails.setSimNo(request.getSimNo());
+        simdetails.setAccountNumber(request.getAccountNumber());
+        simdetails.setMobileNumber(request.getMobileNumber());
+        simdetails.setCreated_by(user);
+        simdetails.setStore(user.getStore());
+        Simdetails savedSim =repository.save(simdetails);
+        if(savedSim.getId() != null){
+            return ResponseBuilder.successResponse("SIM Saved Successfully");
+        }else{
+            return ResponseBuilder.error("SIM Not Saved");
+        }
     }
+
+//    @Override
+//    public ApiResponse<String> simdetailsSave(SimdetailsRequest request) {
+//
+//        return repository.save(request);
+//    }
 }

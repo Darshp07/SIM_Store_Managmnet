@@ -7,7 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-
+@Entity
 @Getter
 @Setter
 @AllArgsConstructor
@@ -15,6 +15,8 @@ import lombok.Setter;
 public class users {
 
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "staff_id")
@@ -27,5 +29,7 @@ public class users {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    private String store_id;
+    @ManyToOne
+    @JoinColumn(name = "store_id")
+    private Store store;
 }
